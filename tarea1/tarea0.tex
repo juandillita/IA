@@ -1,0 +1,147 @@
+%% -*- mode: latex; coding: utf-8; -*-
+%% Comando para compilar: lualatex tarea0.tex
+
+\documentclass[11pt,letterpaper]{article}
+
+
+\usepackage{polyglossia}
+\usepackage{fancyhdr}
+\usepackage[margin=1in]{geometry}
+\usepackage{algpseudocode}
+\usepackage{amsthm}
+\usepackage{framed}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage[margin=1in]{geometry}
+\usepackage{mathtools,amsthm}
+\usepackage{enumitem,amssymb}
+\usepackage{titling}
+\usepackage[default]{fontsetup}
+
+
+\setdefaultlanguage{spanish}
+\setlength{\headheight}{13.6pt}
+\setlength{\droptitle}{-11.5ex}
+\definecolor{shadecolor}{gray}{0.925}
+\newenvironment{solution}{%
+  \noindent\begin{shaded}
+  \textbf{Solución:}\ }{
+  \end{shaded}%
+}
+\chead{}
+\rhead{\today}
+\lfoot{}
+\cfoot{Inteligencia Artificial --- LCC 2024--I}
+\rfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\pagestyle{fancy}
+\setlength{\parindent}{0pt}
+
+
+\newcommand{\bvec}[1]{\symbfit{#1}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+
+\title{%
+  \bfseries
+  Inteligencia artificial\\%
+  Lic. en Ciencias de la Computación\\%
+  Tarea 1
+}
+\date{}
+
+
+\begin{document}
+
+\maketitle
+
+\vspace{-2.5cm}
+\begin{center}
+  \begin{tabular}{rl}
+    Expediente: & 220219356\\
+    Nombre: & Juan Daniel Garcia Ruiz\\
+    Colaboradores: & N/A\end{tabular}
+\end{center}
+
+{\itshape Al entregar esta tarea, declaro que todas las respuestas son
+  producto de mi propio trabajo y de las personas que colaboraron
+  especificadas arriba.}
+
+\section*{Desarrollando la intuición}
+
+\begin{enumerate}
+\item%
+  
+  \begin{solution}
+    Para cada palabra de las reseñas, inicializamos los pesos a 0.
+
+Aplicamos el descenso de gradiente estotastico para acutalizar los pesos basandonos si la reseña es clasificada correctamente o no por nuestro clasificador.
+
+  \[
+  \begin{aligned}
+    Loss_{hinge} = max(0,1-y * (w * x))
+  \end{aligned}
+  \]
+Donde \(y\) es la etiqueta correcta de nuestra reseña y \(w\) es nuestro vector de pesos, y \( x\) es el vector de caracteristicas.
+
+Calculamos los pesos finales de las palabras solicitadas realizando el descenso de gradiente estotastico para cada reseña con el orden dado y actualizando los pesos de acuerdo a nuestra funcion de perdida de articulacion.
+
+  \[
+  \begin{aligned}
+    w = [0.0, 0.1, -0.2, 0.1, -0.1, 0.1]
+  \end{aligned}
+  \]
+Esto nos indica como cada palabra va a influir en la clasificacion de las reseñas como positivas o negativas para cada reseña en el conjunto de entrenamieento. Aquellos con pesos positivos indican que hay mas probabilidad que sea una clasificacion positiva a una negativa.
+  \end{solution}
+
+\section*{Prediciendo calificaciones de películas  }
+
+    1.
+  \begin{solution}
+    La perdida cuadratica se calcula como el cuadrado de la diferencia entre la prediccion y el valor real que queremos. donde σ(w⋅ϕ(x)) va a ser la prediccion hecha por el modelo con σ siendo la funcion logistica ϕ(x).
+
+Nuestra expresion quedaria de esta forma:
+
+  \[
+  \begin{aligned}
+    Loss(x,y,w) = (\sigma(w * \phi(x)) - y)^2
+  \end{aligned}
+  \]
+  \end{solution} 
+\item%
+  
+  \begin{solution}
+    Para calcular el gradiente de perdida cuadratica con respecto a los pesos \(w\) dado que nuestra perdida es:
+     \[
+  \begin{aligned}
+    Loss(x,y,w) = (\sigma(w * \phi(x)) - y)^2
+  \end{aligned}
+  \]
+y el valor predicho es \(p = \sigma(w * \phi(x))\), utilizamos la funcion logistica \((\sigma(z)\) que tiene la propiedad que su derivada es\(\sigma'(z) = \sigma(z)(1 - \sigma(z))\).
+
+El gradiente de la función de pérdida con respecto a \(w\) se obtiene al diferenciar la función de pérdida con respecto a \(w\)
+
+\[\nabla_w Loss(x,y,w) = \nabla_w(p-y)^2\]
+Aplicamos la regla de la cadena:
+\[\nabla_w(p-y)^2 = 2(p-y)\nabla_{wP}\]
+
+Como \(p\) = \(\sigma\)(\(w\)*\(\phi\)(x)) nos queda:
+
+\[\nabla_{wP} = \nabla_w\sigma(w * \phi(x)) = \sigma(w * \phi(x))(1 - \sigma(w * \phi(x))) \nabla_w(w * \phi(x))\]
+\[\nabla_wp = p(1-p)\phi(x)\]
+
+Sustituimos en la expresion \(\nabla_wp\) en el gradiente de la fucnion:
+
+\[\nabla_wLoss(x,y,w) = 2(p - y)p(1-p) \phi(x)\]
+La expresion matematica para el gradiente de la perdida es:
+\[\nabla_wLoss(x,y,w) = 2(p - y)p(1-p) \phi(x)\]
+
+  \end{solution}
+
+\section*{Clasificación de sentimientos    }
+\begin{solution}
+  Incorporada en \texttt{tarea1.py}.
+\end{solution}
+\end{enumerate}
+\end{document}
